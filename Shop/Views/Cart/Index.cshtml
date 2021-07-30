@@ -1,0 +1,160 @@
+﻿@model Shop.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "ItemStore(Your Cart)";
+    Layout = "~/Views/Shared/SellsLayOut.cshtml";
+
+}
+
+<!DOCTYPE html>
+<style>
+    #CartTable td {
+        vertical-align: middle;
+    }
+</style>
+<h2>Your Cart</h2>
+
+<table class="table" id="CartTable">
+    <thead>
+        <tr>
+            <th>العنصر</th>
+            <th class="text-center">الكمية</th>
+            <th class="text-right">السعر</th>
+            <th class="text-right">مجموع السعر</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+       
+
+    @foreach (var line in Model.Cart.LineCollecrtion)
+    {
+        <tr>
+            <td class="text-left"> @line.item.Name</td>
+
+
+            <td class="text-left row">
+                <div class="col-lg-4">
+                    @using (Html.BeginForm("MinusItem", "Cart"))
+                {
+                        @Html.Hidden("Id", line.item.id)
+                        @Html.Hidden("returnUrl", Model.ReternUrl)
+                        <input type="submit" value="-" class="glyphicon-minus pull-left" />
+
+                    }
+                </div>
+                <div class="col-lg-4">
+
+                    <span class="text-warning  " style="font-size:large">   @line.Quantity</span>
+                    </div>
+                <div class="col-lg-4">
+
+                    @using (Html.BeginForm("AddToCart", "Cart"))
+                {
+                        @Html.Hidden("Id", line.item.id)
+                        @Html.Hidden("returnUrl", Model.ReternUrl)
+                        <input type="submit" value="+" class="glyphicon-plus " />
+
+                    }
+                    </div>
+</td>
+
+
+            <td class="text-right   ">@line.item.AcualPrice.ToString("c")</td>
+            <td class="text-right"> @((line.Quantity * line.item.AcualPrice).ToString("c"))</td>
+
+            <td>
+                @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                {
+                    @Html.Hidden("Id", line.item.id)
+                    @Html.Hidden("returnUrl", Model.ReternUrl)
+                    <input type="submit" value="Remove" class="btn btn-warning btn-sm" />
+
+                }
+            </td>
+
+        </tr>
+    }
+
+
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">السعر الكلى</td>
+            <td class="text-right">@Model.Cart.ComputeTotalValue().ToString("c")</td>
+        </tr>
+
+    </tfoot>
+
+</table>
+
+
+@using (Html.BeginForm("Save", "Cart"))
+
+{
+     @Html.AntiForgeryToken()
+    <div class="text-center">
+        @*<a class="btn btn-primary" href="@Model.ReternUrl"> اضافة المذيد </a>*@
+        <input type="submit" value="اضافة المذيد" id="SaveAndRedirect" name="command" class="btn btn-danger" />
+
+    </div>
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+         @Html.LabelFor(model => model.Cart.CustomerId, "Customer", htmlAttributes: new { @class = "control-label col-md-2" })
+         <div class="col-md-10">
+             @Html.DropDownList("CustomerId", (SelectList)ViewBag.DropItems, htmlAttributes: new { @class = "form-control" })
+
+             @Html.ValidationMessageFor(model => model.Cart.CustomerId, "", new { @class = "text-danger" })
+         </div>
+     </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cart.DateTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("DateTime", Model.Cart.DateTime, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Cart.DateTime, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+     
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cart.SellPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("SellPrice", Model.Cart.SellPrice, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Cart.SellPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+       @Html.Hidden("returnUrl", Model.ReternUrl)
+
+
+
+
+
+
+
+
+
+
+        <div class="text-center">
+            @*<a class="btn btn-primary" href="@Model.ReternUrl"> اضافة المذيد </a>*@
+            @{string value = (Model.Cart.OldCart == null ? "اضافة" : "حفظ التعديلات"); string Hidden = (Model.Cart.OldCart == null ? "hidden" : "");}
+            <input type="submit" value="@value" id="SaveAndEnd" name="command" title="SaveAndEnd" class="btn btn-primary" />
+<input type="submit" value="الغاء" id="SaveAndEnd" name="command" title="الغاء" class="btn btn-warning" />
+            <input type="submit" value="حذف" id="Delete" name="command" title="حذف" class="btn btn-danger @Hidden"  />
+
+        </div>
+    </div>
+}
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

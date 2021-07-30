@@ -1,0 +1,23 @@
+﻿
+
+@model List<Shop.Catigory>
+
+@{
+
+    bool hirozential = (bool)(ViewContext.RouteData.Values["MobileLayout"] ?? false);
+    string divclasses = hirozential ? "btn-group btn -group-sm btn -group-justified" : null;
+    string btnclasses = hirozential ? " btn btn-default btn-sm" : " btn btn-default btn-lg btn-block ";
+
+
+}
+
+<div class="@divclasses">
+    @Html.ActionLink("Home", "List", "SellItems", null, new { @class = btnclasses + ((ViewBag.SelectedCat<=0) ? "btn-primary" : "").ToString() })
+
+
+    @foreach (var cat in @Model)
+    {
+        @Html.RouteLink(((Catigory)cat).Name, new { Controller = "SellItems", Action = "List", CatigoryId = ((Catigory)cat).id, PageNum = 1 }, new { @class = btnclasses + ((cat.id == ViewBag.SelectedCat) ? "btn-primary" : "").ToString() })
+    }
+
+</div>

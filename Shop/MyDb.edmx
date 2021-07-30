@@ -1,0 +1,627 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShopDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Catigories">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Desc" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="IsDeleted" Type="bit" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Events">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nvarchar(max)" />
+          <Property Name="EventDateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CatigoryId" Type="int" Nullable="false" />
+          <Property Name="Count" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="AcualPrice" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="SellPrice" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Company" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="ItemPrice" Type="decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Count" Type="int" Nullable="false" />
+          <Property Name="ItemTotalPrice" Type="decimal" Precision="20" Scale="2" StoreGeneratedPattern="Computed" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customerid" Type="int" />
+          <Property Name="DateTime" Type="datetime" />
+          <Property Name="TotalPrice" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="SellPrice" Type="decimal" Precision="9" Scale="2" />
+          <Property Name="Userid" Type="int" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <EntityType Name="Pages">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Acionname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ControllerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PageName_Ar" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="UserPages">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="PageId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="PageId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsDeleted" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Items_Catigories">
+          <End Role="Catigories" Type="Self.Catigories" Multiplicity="1" />
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catigories">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="CatigoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPages_Pages">
+          <End Role="Pages" Type="Self.Pages" Multiplicity="1" />
+          <End Role="UserPages" Type="Self.UserPages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pages">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserPages">
+              <PropertyRef Name="PageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserPages_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="UserPages" Type="Self.UserPages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserPages">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="User_GetByUserName_Password" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsrName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Users_CheckUserNameForAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Users_CheckUserNameForEdit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ShopDBModelStoreContainer">
+          <EntitySet Name="Catigories" EntityType="Self.Catigories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pages" EntityType="Self.Pages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPages" EntityType="Self.UserPages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Items_Catigories" Association="Self.FK_Items_Catigories">
+            <End Role="Catigories" EntitySet="Catigories" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Items" Association="Self.FK_OrderDetails_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPages_Pages" Association="Self.FK_UserPages_Pages">
+            <End Role="Pages" EntitySet="Pages" />
+            <End Role="UserPages" EntitySet="UserPages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserPages_Users" Association="Self.FK_UserPages_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserPages" EntitySet="UserPages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShopDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Catigory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Items_Catigories" FromRole="Catigories" ToRole="Items" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EventDateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CatigoryId" Type="Int32" Nullable="false" />
+          <Property Name="Count" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AcualPrice" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="SellPrice" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Company" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="Catigory" Relationship="Self.FK_Items_Catigories" FromRole="Items" ToRole="Catigories" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Items" FromRole="Items" ToRole="OrderDetails" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderId" />
+            <PropertyRef Name="ItemId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="9" Scale="2" Nullable="false" />
+          <Property Name="Count" Type="Int32" Nullable="false" />
+          <Property Name="ItemTotalPrice" Type="Decimal" Precision="20" Scale="2" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_OrderDetails_Items" FromRole="OrderDetails" ToRole="Items" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Orders" FromRole="OrderDetails" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customerid" Type="Int32" />
+          <Property Name="DateTime" Type="DateTime" Precision="3" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="SellPrice" Type="Decimal" Precision="9" Scale="2" />
+          <Property Name="Userid" Type="Int32" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Orders_Customers" FromRole="Orders" ToRole="Customers" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Orders" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Page">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Acionname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ControllerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PageName_Ar" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.UserPages" FromRole="Pages" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Pages" Relationship="Self.UserPages" FromRole="Users" ToRole="Pages" />
+        </EntityType>
+        <Association Name="FK_Items_Catigories">
+          <End Role="Catigories" Type="Self.Catigory" Multiplicity="1" />
+          <End Role="Items" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Catigories">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="CatigoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Items">
+          <End Role="Items" Type="Self.Item" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Orders">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="Userid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserPages">
+          <End Role="Pages" Type="Self.Page" Multiplicity="*" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ShopDBEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Catigories" EntityType="Self.Catigory" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Pages" EntityType="Self.Page" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Items_Catigories" Association="Self.FK_Items_Catigories">
+            <End Role="Catigories" EntitySet="Catigories" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Items" Association="Self.FK_OrderDetails_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Orders" Association="Self.FK_OrderDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="UserPages" Association="Self.UserPages">
+            <End Role="Pages" EntitySet="Pages" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <FunctionImport Name="User_GetByUserName_Password" ReturnType="Collection(ShopDBModel.User_GetByUserName_Password_Result)">
+            <Parameter Name="UsrName" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Users_CheckUserNameForAdd" ReturnType="Collection(Int32)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Users_CheckUserNameForEdit" ReturnType="Collection(Int32)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="User_GetByUserName_Password_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShopDBModelStoreContainer" CdmEntityContainer="ShopDBEntities1">
+          <EntitySetMapping Name="Catigories">
+            <EntityTypeMapping TypeName="ShopDBModel.Catigory">
+              <MappingFragment StoreEntitySet="Catigories">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Desc" ColumnName="Desc" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="ShopDBModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="ShopDBModel.Event">
+              <MappingFragment StoreEntitySet="Events">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="EventDateTime" ColumnName="EventDateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="ShopDBModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="CatigoryId" ColumnName="CatigoryId" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AcualPrice" ColumnName="AcualPrice" />
+                <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="ShopDBModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="ItemTotalPrice" ColumnName="ItemTotalPrice" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="ShopDBModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Customerid" ColumnName="Customerid" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+                <ScalarProperty Name="Userid" ColumnName="Userid" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pages">
+            <EntityTypeMapping TypeName="ShopDBModel.Page">
+              <MappingFragment StoreEntitySet="Pages">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Acionname" ColumnName="Acionname" />
+                <ScalarProperty Name="ControllerName" ColumnName="ControllerName" />
+                <ScalarProperty Name="PageName_Ar" ColumnName="PageName_Ar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ShopDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ShopDBModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="UserPages" TypeName="ShopDBModel.UserPages" StoreEntitySet="UserPages">
+            <EndProperty Name="Pages">
+              <ScalarProperty Name="id" ColumnName="PageId" />
+            </EndProperty>
+            <EndProperty Name="Users">
+              <ScalarProperty Name="id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="User_GetByUserName_Password" FunctionName="ShopDBModel.Store.User_GetByUserName_Password">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ShopDBModel.User_GetByUserName_Password_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Users_CheckUserNameForAdd" FunctionName="ShopDBModel.Store.Users_CheckUserNameForAdd" />
+          <FunctionImportMapping FunctionImportName="Users_CheckUserNameForEdit" FunctionName="ShopDBModel.Store.Users_CheckUserNameForEdit" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

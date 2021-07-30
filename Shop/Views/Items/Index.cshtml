@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Shop.Item>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>الانواع </h2>
+<style>
+    .f {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+
+<p>
+    @Html.ActionLink("اضافة جديد", "Create",new { id = 2 },htmlAttributes: new { @class = "btn f" })
+</p>
+<table class="table" style="font-size:18px">
+    <tr>
+        <th>
+            الاسم
+        </th>
+        <th>
+            العدد المتوفر
+        </th>
+
+        <th>
+سعرالجملة        </th>
+        <th>
+            السعر قطاعى
+        </th>
+        <th>
+الشركة/المصنع        
+        </th>
+      
+        <th>
+اسم الصنف        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AcualPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SellPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Catigory.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }, htmlAttributes: new { @class = "btn btn-primary" }) ||
+            @Html.ActionLink("Delete", "Delete", new { id=item.id }, htmlAttributes: new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,23 @@
+﻿
+@model Shop.Models.Cart
+
+<div class="navbar-right hidden-xs">
+    @Html.ActionLink("Checkout", "Index", "Cart", new { returnUrl = Request.Url.PathAndQuery },
+    new { @class = "btn btn-default navbar-btn" })
+
+
+</div>
+
+<div class="navbar-right visible-xs">
+    <a href=@Url.Action("Index", "Cart", new { returnUrl = Request.Url.PathAndQuery }).ToString()
+       class="btn btn-default navbar-btn">
+        <span class="glyphicon-shopping-cart"></span>
+    </a>
+</div>
+
+<div class="navbar-text navbar-right">
+
+    <span class="hidden-xs">Your Cart:</span>
+    @Model.LineCollecrtion.Sum(q => q.Quantity) عنصر
+    @Model.ComputeTotalValue().ToString("c")
+</div>

@@ -1,0 +1,39 @@
+﻿
+@model  Shop.Item
+<div class="well "style="padding-top:0">
+  
+
+    <div class="row " >
+        <div class="col-lg-6" >
+            <h4>
+                <strong>@Model.Name</strong>
+
+            </h4>
+            <h5 >  @Model.Count العدد المتوفر</h5>
+
+        </div>
+        <div class="col-lg-6">
+             <h4>
+
+                <span class="pull-right label label-primary">@Model.AcualPrice.ToString() ج </span>
+
+
+            </h4>
+        </div>
+    </div>
+
+
+    @using (Html.BeginForm("AddToCart", "Cart"))
+    {
+        <div class="pull-right">
+            @Html.HiddenFor(i => i.id)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+
+            <input type="submit"style="font-size:smaller ;font-weight:200" class="btn btn-success " value="Add To cart" />
+
+
+
+        </div>
+    }
+</div>
+

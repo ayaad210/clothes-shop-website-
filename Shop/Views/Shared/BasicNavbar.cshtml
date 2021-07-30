@@ -1,0 +1,40 @@
+﻿@model Shop.Models.BasicNavBarModel
+
+
+<style>
+
+    li{font-size:24px; }
+</style>
+
+
+    
+        <div class="navbar-header">
+          <div class="navbar-brand  panel-title" style="font-size:24px ;color :white"  > @Html.ActionLink("الرئيسية", "Login",controllerName:"Home")</div>
+
+        </div>
+        <ul class="nav navbar-nav">
+            @foreach (var page in Model.user.Pages)
+            {
+                if (Model.PageName=="Home")
+                {
+                    <li> @Html.ActionLink(page.PageName_Ar, page.Acionname, page.ControllerName)</li>
+
+                }
+                else if (Model.PageName == "Sells")
+                {
+                    if ((page.Acionname == "Index"&&page.ControllerName=="Cart")|| (page.Acionname == "Index" && page.ControllerName == "Orders")|| (page.Acionname == "List" && page.ControllerName == "SellItems"))
+                    {
+                        <li> @Html.ActionLink(page.PageName_Ar, page.Acionname, page.ControllerName)</li>
+
+                    }
+
+                }
+           
+            }
+
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> خروج</a></li>
+        </ul>
+=

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Shop.Customer>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+<style>
+    .f {
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
+
+<h2>ادارة الزبائن</h2>
+
+<p>
+    @Html.ActionLink("اضافة جديد", "Create", new { id = 2 }, htmlAttributes: new { @class = "btn f" })
+</p>
+<table class="table" style="font-size:18px">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id },htmlAttributes: new { @class = "btn btn-primary" }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id },htmlAttributes: new { @class = "btn btn-danger" } )
+        </td>
+    </tr>
+}
+
+</table>
